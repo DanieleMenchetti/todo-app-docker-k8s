@@ -6,6 +6,10 @@ type Props = {
 };
 
 function TodoList({ todos }: Props) {
+  if (todos.length === 0) {
+    return <p>There are no todos</p>;
+  }
+  
   return (
     <div>
       {todos.map((todo) => (

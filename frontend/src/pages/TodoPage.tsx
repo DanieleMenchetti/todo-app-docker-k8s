@@ -46,10 +46,6 @@ function TodoPage() {
 		return <p>Loading...</p>;
 	}
 
-	if (todos.length === 0) {
-		return <p>There are no todos</p>;
-	}
-
 	return (
 		<div>
 		<h1>Todo List</h1>
