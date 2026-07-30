@@ -31,3 +31,13 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: DATABASE_URL
+
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: PORT
+
+
+
+                  
