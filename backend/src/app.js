@@ -10,7 +10,7 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use("/todos", todoRoutes);
-app.use("/health", healthRoutes);
+app.use("/api/todos", todoRoutes);
+app.use("/api/health", healthRoutes);
 
 module.exports = app;
