@@ -44,8 +44,12 @@ function request(path) {
   });
 }
 
-test("GET /api/health returns HTTP 200", async () => {
+test("GET /api/health returns HTTP 200 and status ok", async () => {
   const response = await request("/api/health");
 
   assert.strictEqual(response.statusCode, 200);
+
+  const data = JSON.parse(response.body);
+
+  assert.strictEqual(data.status, "ok");
 });
