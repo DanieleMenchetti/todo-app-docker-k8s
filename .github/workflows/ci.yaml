@@ -8,6 +8,10 @@ on:
     branches:
       - develop/ci-cd
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   frontend:
     name: Frontend CI
@@ -66,7 +70,7 @@ jobs:
         run: npm test
 
   docker:
-    name: Docker Build
+    name: Docker Build & Push
     runs-on: ubuntu-latest
     needs:
       - frontend
@@ -76,8 +80,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build backend image
-        run: docker build -t todo-backend:ci ./backend
+        run: docker build -t ghcr.io/${{ github.repository }}/backend:latest ./backend
 
       - name: Build frontend image
-        run: docker build -t todo-frontend:ci ./frontend
+        run: docker build -t ghcr.io/${{ github.repository }}/frontend:latest ./frontend
+
+      - name: Push backend image
+        run: docker push ghcr.io/${{ github.repository }}/backend:latest
+
+      - name: Push frontend image
+        run: docker push ghcr.io/${{ github.repository }}/frontend:latest
