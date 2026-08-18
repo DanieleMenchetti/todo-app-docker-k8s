@@ -87,14 +87,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image names
+        run: |
+          echo "BACKEND_IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/backend" >> "$GITHUB_ENV"
+          echo "FRONTEND_IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/frontend" >> "$GITHUB_ENV"
+
       - name: Build backend image
-        run: docker build -t ghcr.io/${{ github.repository }}/backend:latest ./backend
+        run: docker build -t "$BACKEND_IMAGE:latest" ./backend
 
       - name: Build frontend image
-        run: docker build -t ghcr.io/${{ github.repository }}/frontend:latest ./frontend
+        run: docker build -t "$FRONTEND_IMAGE:latest" ./frontend
 
       - name: Push backend image
-        run: docker push ghcr.io/${{ github.repository }}/backend:latest
+        run: docker push "$BACKEND_IMAGE:latest"
 
       - name: Push frontend image
-        run: docker push ghcr.io/${{ github.repository }}/frontend:latest
+        run: docker push "$FRONTEND_IMAGE:latest"
