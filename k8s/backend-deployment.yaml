@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: todo-backend:v1
+          image: ghcr.io/danielemenchetti/todo-app-docker-k8s/backend:IMAGE_TAG
           imagePullPolicy: IfNotPresent
 
           ports:

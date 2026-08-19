@@ -1,0 +1,62 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+    branches:
+      - develop/ci-cd
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Prepare Kubernetes Deployment
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: develop/ci-cd
+
+      - name: Set image tag
+        run: |
+          echo "IMAGE_TAG=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_ENV"
+
+      - name: Render Kubernetes manifests
+        run: |
+          mkdir -p rendered
+
+          sed "s/IMAGE_TAG/${IMAGE_TAG:0:7}/g" \
+            k8s/backend-deployment.yaml \
+            > rendered/backend-deployment.yaml
+
+          sed "s/IMAGE_TAG/${IMAGE_TAG:0:7}/g" \
+            k8s/frontend-deployment.yaml \
+            > rendered/frontend-deployment.yaml
+
+      - name: Show rendered images
+        run: |
+          echo "Backend:"
+          grep "image:" rendered/backend-deployment.yaml
+
+          echo "Frontend:"
+          grep "image:" rendered/frontend-deployment.yaml
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: |
+          kubectl apply \
+            --dry-run=client \
+            -f rendered/backend-deployment.yaml
+
+          kubectl apply \
+            --dry-run=client \
+            -f rendered/frontend-deployment.yaml
