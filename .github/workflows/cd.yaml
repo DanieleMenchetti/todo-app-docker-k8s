@@ -1,13 +1,7 @@
 name: CD
 
 on:
-  workflow_run:
-    workflows:
-      - CI
-    types:
-      - completed
-    branches:
-      - develop/ci-cd
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,7 +9,6 @@ permissions:
 jobs:
   deploy:
     name: Prepare Kubernetes Deployment
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +19,7 @@ jobs:
 
       - name: Set image tag
         run: |
-          echo "IMAGE_TAG=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_ENV"
+          echo "IMAGE_TAG=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Render Kubernetes manifests
         run: |
