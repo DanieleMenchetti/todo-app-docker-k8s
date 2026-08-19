@@ -6,7 +6,7 @@ on:
     workflows:
       - CI
     branches:
-      - develop/ci-cd
+      - main
     types:
       - completed
 
