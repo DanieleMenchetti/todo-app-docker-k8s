@@ -58,11 +58,11 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          kubectl apply \
+          kubectl create \
             --dry-run=client \
             -f rendered/backend-deployment.yaml
 
-          kubectl apply \
+          kubectl create \
             --dry-run=client \
             -f rendered/frontend-deployment.yaml
 
