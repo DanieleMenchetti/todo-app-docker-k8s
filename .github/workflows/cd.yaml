@@ -33,13 +33,17 @@ jobs:
             k8s/frontend-deployment.yaml \
             > rendered/frontend-deployment.yaml
 
-      - name: Show rendered images
+      - name: Verify rendered images
         run: |
-          echo "Backend:"
-          grep "image:" rendered/backend-deployment.yaml
+          echo "Rendered images:"
 
-          echo "Frontend:"
+          grep "image:" rendered/backend-deployment.yaml
           grep "image:" rendered/frontend-deployment.yaml
+
+          if grep -R "IMAGE_TAG" rendered/; then
+            echo "ERROR: IMAGE_TAG was not replaced"
+            exit 1
+          fi
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
