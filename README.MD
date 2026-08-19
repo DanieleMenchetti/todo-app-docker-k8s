@@ -50,3 +50,6 @@ kubectl apply -f k8s/ingress.yaml
 </pre>
 
 Go to [http://todo.local](http://todo.local)
+
+
+Please note: pipeline CI/CD on branch main only deploys rendered Kubernetes manifests.
