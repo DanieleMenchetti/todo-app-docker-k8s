@@ -7,6 +7,7 @@ Add this line to hosts file
 127.0.0.1 todo.local
 </pre>
 
+Execute the commands below:
 <pre>
 kind create cluster --name todo-platform --config kind-config.yaml
 
@@ -45,6 +46,7 @@ Wait until ingress-nginx-controller status becomes Running
 kubectl get pods -n ingress-nginx
 </pre>
 
+Execute
 <pre>
 kubectl apply -f k8s/ingress.yaml
 </pre>
