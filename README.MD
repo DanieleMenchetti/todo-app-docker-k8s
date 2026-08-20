@@ -1,4 +1,4 @@
-## TODO APP - Docker & Kubernetes
+## TODO APP - Docker
 
 ### Run it
 <pre>
